@@ -30,8 +30,7 @@ public class IngredienteService {
     }
 
     public Ingrediente getIngredienteById(Long id) throws Exception {
-        return ingredienteRepository.findById(id)
-                .orElseThrow(() -> new Exception("Ingrediente no encontrado"));
+        return ingredienteRepository.findById(id).orElseThrow(() -> new Exception("Ingrediente no encontrado"));
     }
 
     public Ingrediente createIngrediente(Ingrediente ingrediente) {
@@ -61,11 +60,9 @@ public class IngredienteService {
 
     // Relación N:M: agregar ingrediente a plato
     public Plato addIngredienteToPlato(Long platoId, Long ingredienteId, int cantidad) throws Exception {
-        Plato plato = platoRepository.findById(platoId)
-                .orElseThrow(() -> new Exception("Plato no encontrado"));
+        Plato plato = platoRepository.findById(platoId).orElseThrow(() -> new Exception("Plato no encontrado"));
 
-        Ingrediente ingrediente = ingredienteRepository.findById(ingredienteId)
-                .orElseThrow(() -> new Exception("Ingrediente no encontrado"));
+        Ingrediente ingrediente = ingredienteRepository.findById(ingredienteId).orElseThrow(() -> new Exception("Ingrediente no encontrado"));
 
         PlatoIngrediente pi = new PlatoIngrediente();
         pi.setPlato(plato);
