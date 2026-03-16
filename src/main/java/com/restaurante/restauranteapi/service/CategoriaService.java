@@ -18,8 +18,7 @@ public class CategoriaService {
     }
 
     public Categoria getCategoriaById(Long id) throws Exception {
-        return categoriaRepository.findById(id)
-                .orElseThrow(() -> new Exception("Categoria no encontrada"));
+        return categoriaRepository.findById(id).orElseThrow(() -> new Exception("Categoria no encontrada"));
     }
 
     public Categoria createCategoria(Categoria categoria) {

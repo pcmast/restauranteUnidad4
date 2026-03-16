@@ -9,6 +9,7 @@ import com.restaurante.restauranteapi.repository.PlatoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -30,8 +31,7 @@ public class PedidoService {
     }
 
     public Pedido getPedidoById(Long id) throws Exception {
-        return pedidoRepository.findById(id)
-                .orElseThrow(() -> new Exception("Pedido no encontrado"));
+        return pedidoRepository.findById(id).orElseThrow(() -> new Exception("Pedido no encontrado"));
     }
 
     public Pedido createPedido(Pedido pedido){
@@ -66,20 +66,21 @@ public class PedidoService {
 
 
     public Pedido addPlatoToPedido(Long pedidoId, Long platoId, int cantidad) throws Exception {
+        Pedido pedido = pedidoRepository.findById(pedidoId).orElseThrow(() -> new Exception("Pedido no encontrado"));
 
-        Pedido pedido = pedidoRepository.findById(pedidoId)
-                .orElseThrow(() -> new Exception("Pedido no encontrado"));
+        Plato plato = platoRepository.findById(platoId).orElseThrow(() -> new Exception("Plato no encontrado"));
 
-        Plato plato = platoRepository.findById(platoId)
-                .orElseThrow(() -> new Exception("Plato no encontrado"));
+        Pedidoplato pedidoplato = new Pedidoplato();
+        pedidoplato.setPedido(pedido);
+        pedidoplato.setPlato(plato);
+        pedidoplato.setCantidad(cantidad);
 
-        Pedidoplato pp = new Pedidoplato();
-        pp.setPedido(pedido);
-        pp.setPlato(plato);
-        pp.setCantidad(cantidad);
+        pedido.getPedidoplatoes().add(pedidoplato);
 
-        pedidoPlatoRepository.save(pp);
+        BigDecimal precioPlatoTotal = plato.getPrecio().multiply(BigDecimal.valueOf(cantidad));
+        pedido.setPrecioTotal(pedido.getPrecioTotal().add(precioPlatoTotal));
 
-        return pedidoRepository.findById(pedidoId).get();
+        pedidoPlatoRepository.save(pedidoplato);
+        return pedidoRepository.save(pedido);
     }
 }

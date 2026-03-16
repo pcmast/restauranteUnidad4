@@ -1,5 +1,6 @@
 package com.restaurante.restauranteapi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -31,6 +32,7 @@ public class Ingrediente {
     private Integer stock;
 
     @OneToMany(mappedBy = "ingrediente")
+    @JsonIgnore
     private Set<PlatoIngrediente> platoIngredientes = new LinkedHashSet<>();
 
 }
