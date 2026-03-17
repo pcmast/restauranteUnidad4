@@ -2,6 +2,7 @@ package com.restaurante.restauranteapi.service;
 import com.restaurante.restauranteapi.model.Ingrediente;
 import com.restaurante.restauranteapi.model.Plato;
 import com.restaurante.restauranteapi.model.PlatoIngrediente;
+import com.restaurante.restauranteapi.model.PlatoIngredienteId;
 import com.restaurante.restauranteapi.repository.IngredienteRepository;
 import com.restaurante.restauranteapi.repository.PlatoRepository;
 import com.restaurante.restauranteapi.repository.PlatoIngredienteRepository;
@@ -60,11 +61,17 @@ public class IngredienteService {
 
     // Relación N:M: agregar ingrediente a plato
     public Plato addIngredienteToPlato(Long platoId, Long ingredienteId, int cantidad) throws Exception {
+
         Plato plato = platoRepository.findById(platoId).orElseThrow(() -> new Exception("Plato no encontrado"));
 
         Ingrediente ingrediente = ingredienteRepository.findById(ingredienteId).orElseThrow(() -> new Exception("Ingrediente no encontrado"));
 
+        PlatoIngredienteId id = new PlatoIngredienteId();
+        id.setPlatoId(plato.getId());
+        id.setIngredienteId(ingrediente.getId());
+
         PlatoIngrediente pi = new PlatoIngrediente();
+        pi.setId(id);
         pi.setPlato(plato);
         pi.setIngrediente(ingrediente);
         pi.setCantidad(cantidad);
@@ -73,7 +80,6 @@ public class IngredienteService {
 
         return plato;
     }
-
 
     public List<Plato> getPlatosPorIngrediente(Long ingredienteId){
         List<PlatoIngrediente> listaPI = platoIngredienteRepository.findByIngredienteId(ingredienteId);
